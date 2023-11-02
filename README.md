@@ -1,29 +1,35 @@
-# faker-image-issue
+# faker-fix-image-issue
 this is an issue where faker won't generate images to your project
 
 to fix this, just replace the file on <b>"vendor\fakerphp\faker\src\Faker\Provider\Image.php"</b> with the file on top or 
 
 edit by yourself:
 
-public const BASE_URL = 'https://placehold.jp'; // change the url to this (https://placehold.jp) , since the old one isn't working anymore
+change the url to (https://placehold.jp), since the old one isn't working anymore
+
+        public const BASE_URL = 'https://placehold.jp'; 
 
 at the function:
+       
         // save file
         if (function_exists('curl_exec')) {
 
-fter the line: 
-curl_setopt($ch, CURLOPT_FILE, $fp);
+after the line: 
+
+            curl_setopt($ch, CURLOPT_FILE, $fp);
 
 and before the line:
-$success = curl_exec($ch) && curl_getinfo($ch, CURLINFO_HTTP_CODE) === 200;
+            
+             $success = curl_exec($ch) && curl_getinfo($ch, CURLINFO_HTTP_CODE) === 200;
 
-add those two lines:
-curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+<b>add</b> those two lines:
+
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false); 
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); 
 
 and your code will be like that:
-
-   // save file
+  
+        //save file
         if (function_exists('curl_exec')) {
             // use cURL
             $fp = fopen($filepath, 'w');
@@ -40,6 +46,7 @@ and your code will be like that:
 
                 // could not contact the distant URL or HTTP error - fail silently.
                 return false;
+                
             }
         } elseif (ini_get('allow_url_fopen')) {
             // use remote fopen() via copy()
